@@ -1,0 +1,12 @@
+# Ignore credentials and sensitive files
+credentials/service-account.json
+*.log
+.DS_Store
+
+# Ignore vendor directory (should be managed by Composer)
+# vendor/
+
+# Ignore other common files
+node_modules/
+*.tmp
+*.cache
