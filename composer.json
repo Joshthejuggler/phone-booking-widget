@@ -1,0 +1,12 @@
+{
+    "name": "phone-repair-intake/google-calendar",
+    "description": "Google Calendar integration for Phone Repair Intake Form",
+    "require": {
+        "google/apiclient": "^2.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhoneRepairIntake\\": "src/"
+        }
+    }
+}

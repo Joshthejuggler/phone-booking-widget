@@ -1,0 +1,379 @@
+/* Phone Repair Intake Form - Admin Styles */
+
+/* Dashboard Stats */
+.pri-dashboard-stats {
+    margin: 20px 0;
+}
+
+.pri-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.pri-stat-item {
+    text-align: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.pri-stat-number {
+    font-size: 36px;
+    font-weight: bold;
+    color: #007cba;
+    margin-bottom: 5px;
+}
+
+.pri-stat-label {
+    font-size: 14px;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Dashboard Layout */
+.pri-dashboard-content {
+    float: left;
+    width: 70%;
+    margin-right: 2%;
+}
+
+.pri-dashboard-sidebar {
+    float: right;
+    width: 28%;
+}
+
+.pri-dashboard-content:after,
+.pri-dashboard-sidebar:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Models Management */
+.pri-models-header {
+    margin: 20px 0;
+    padding: 15px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.pri-models-list {
+    margin-top: 20px;
+}
+
+/* Modal Styles */
+.pri-modal {
+    position: fixed;
+    z-index: 100000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+}
+
+.pri-modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.pri-modal-header {
+    background: #007cba;
+    color: white;
+    padding: 20px 30px;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+}
+
+.pri-modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.pri-modal-close {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.pri-modal-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.pri-modal-body {
+    padding: 30px;
+}
+
+/* Status Badges */
+.pri-status-active,
+.pri-status-pending {
+    background: #28a745;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.pri-status-inactive,
+.pri-status-cancelled {
+    background: #6c757d;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.pri-status-confirmed {
+    background: #007bff;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.pri-status-in_progress {
+    background: #ffc107;
+    color: #212529;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.pri-status-completed {
+    background: #28a745;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* SMS Badge */
+.pri-sms-badge {
+    background: #17a2b8;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-left: 5px;
+}
+
+/* Customer Info */
+.pri-customer-info {
+    line-height: 1.4;
+}
+
+.pri-customer-info strong {
+    display: block;
+    margin-bottom: 3px;
+}
+
+.pri-customer-info a {
+    color: #007cba;
+    text-decoration: none;
+}
+
+.pri-customer-info a:hover {
+    text-decoration: underline;
+}
+
+/* Loading Overlay */
+#pri-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 99999;
+}
+
+.pri-loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+/* Form Styling */
+.pri-modal-body .form-table th {
+    width: 150px;
+    padding: 15px 0;
+}
+
+.pri-modal-body .form-table td {
+    padding: 15px 0;
+}
+
+.pri-modal-body .regular-text {
+    width: 100%;
+    max-width: 300px;
+}
+
+/* Button Improvements */
+.button.pri-edit-model {
+    margin-right: 5px;
+}
+
+.button.pri-delete-model {
+    color: #dc3545;
+}
+
+.button.pri-delete-model:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 782px) {
+    .pri-dashboard-content,
+    .pri-dashboard-sidebar {
+        float: none;
+        width: 100%;
+        margin-right: 0;
+    }
+    
+    .pri-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .pri-modal-content {
+        width: 95%;
+        margin: 10px auto;
+    }
+    
+    .pri-modal-header,
+    .pri-modal-body {
+        padding: 15px 20px;
+    }
+}
+
+/* WordPress Admin Compatibility */
+.wrap .pri-dashboard-stats .postbox h2,
+.wrap .pri-dashboard-content .postbox h2,
+.wrap .pri-dashboard-sidebar .postbox h2 {
+    padding: 12px 20px;
+    margin: 0;
+    font-size: 16px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.wrap .postbox .inside {
+    margin: 0;
+    padding: 20px;
+}
+
+/* Filter Styles */
+.pri-status-filter {
+    margin: 15px 0;
+}
+
+.pri-status-filter .subsubsub {
+    margin: 0;
+}
+
+.pri-status-filter .subsubsub a {
+    text-decoration: none;
+    color: #0073aa;
+}
+
+.pri-status-filter .subsubsub a.current {
+    font-weight: 600;
+    color: #000;
+}
+
+.pri-status-filter .subsubsub .count {
+    color: #999;
+}
+
+/* Appointments Table Columns */
+.pri-repair-type {
+    min-width: 120px;
+}
+
+.pri-repair-type strong {
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.pri-repair-desc {
+    color: #6c757d;
+    font-style: italic;
+    line-height: 1.3;
+}
+
+.pri-customer-notes {
+    min-width: 150px;
+    max-width: 200px;
+}
+
+.pri-notes-preview {
+    line-height: 1.4;
+    margin-bottom: 5px;
+    word-wrap: break-word;
+}
+
+.pri-show-full-notes {
+    color: #0073aa;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.pri-show-full-notes:hover {
+    text-decoration: underline;
+}
+
+.pri-no-notes {
+    color: #999;
+    font-size: 13px;
+}
+
+/* Table column widths for better layout */
+.wp-list-table .manage-column {
+    vertical-align: top;
+}
+
+.wp-list-table td {
+    vertical-align: top;
+    padding: 12px 8px;
+}
+
+.wp-list-table .pri-customer-info {
+    min-width: 200px;
+}
