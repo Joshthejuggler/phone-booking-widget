@@ -68,11 +68,47 @@ $models = $wpdb->get_results("
                         </tr>
                         <tr>
                             <th scope="row">
-                                <label for="model-price"><?php _e('Repair Price', 'phone-repair-intake'); ?></label>
+                                <label for="model-screen-price"><?php _e('Screen Repair Price', 'phone-repair-intake'); ?></label>
                             </th>
                             <td>
-                                <input type="number" id="model-price" name="price" class="regular-text" step="0.01" min="0" required>
-                                <p class="description"><?php _e('Enter the repair price in dollars (e.g., 299.99)', 'phone-repair-intake'); ?></p>
+                                <input type="text" id="model-screen-price" name="price" class="regular-text" required>
+                                <p class="description"><?php _e('Enter the screen repair price in dollars (e.g., 280.00)', 'phone-repair-intake'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <label for="model-battery-price"><?php _e('Battery Repair Price', 'phone-repair-intake'); ?></label>
+                            </th>
+                            <td>
+                                <input type="text" id="model-battery-price" name="battery_price" class="regular-text" placeholder="0.00">
+                                <p class="description"><?php _e('Leave blank to hide battery repair option', 'phone-repair-intake'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <label for="model-charging-price"><?php _e('Charging Repair Price', 'phone-repair-intake'); ?></label>
+                            </th>
+                            <td>
+                                <input type="text" id="model-charging-price" name="charging_price" class="regular-text" placeholder="0.00">
+                                <p class="description"><?php _e('Leave blank to hide charging repair option', 'phone-repair-intake'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <label for="model-camera-price"><?php _e('Camera Repair Price', 'phone-repair-intake'); ?></label>
+                            </th>
+                            <td>
+                                <input type="text" id="model-camera-price" name="camera_price" class="regular-text" placeholder="0.00">
+                                <p class="description"><?php _e('Leave blank to hide camera repair option', 'phone-repair-intake'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <label for="model-water-price"><?php _e('Water Damage Repair Price', 'phone-repair-intake'); ?></label>
+                            </th>
+                            <td>
+                                <input type="text" id="model-water-price" name="water_price" class="regular-text" placeholder="0.00">
+                                <p class="description"><?php _e('Leave blank to hide water damage repair option', 'phone-repair-intake'); ?></p>
                             </td>
                         </tr>
                         <tr>
@@ -108,7 +144,6 @@ $models = $wpdb->get_results("
                 <thead>
                     <tr>
                         <th class="manage-column"><?php _e('iPhone Model', 'phone-repair-intake'); ?></th>
-                        <th class="manage-column"><?php _e('Price', 'phone-repair-intake'); ?></th>
                         <th class="manage-column"><?php _e('Status', 'phone-repair-intake'); ?></th>
                         <th class="manage-column"><?php _e('Created', 'phone-repair-intake'); ?></th>
                         <th class="manage-column"><?php _e('Actions', 'phone-repair-intake'); ?></th>
@@ -119,9 +154,6 @@ $models = $wpdb->get_results("
                         <tr data-model-id="<?php echo $model->id; ?>">
                             <td>
                                 <strong><?php echo esc_html($model->model_name); ?></strong>
-                            </td>
-                            <td>
-                                $<?php echo number_format($model->price, 2); ?>
                             </td>
                             <td>
                                 <?php if ($model->is_active): ?>
@@ -138,6 +170,10 @@ $models = $wpdb->get_results("
                                         data-id="<?php echo $model->id; ?>"
                                         data-name="<?php echo esc_attr($model->model_name); ?>"
                                         data-price="<?php echo $model->price; ?>"
+                                        data-battery-price="<?php echo $model->battery_price ?? ''; ?>"
+                                        data-charging-price="<?php echo $model->charging_price ?? ''; ?>"
+                                        data-camera-price="<?php echo $model->camera_price ?? ''; ?>"
+                                        data-water-price="<?php echo $model->water_price ?? ''; ?>"
                                         data-active="<?php echo $model->is_active; ?>">
                                     <?php _e('Edit', 'phone-repair-intake'); ?>
                                 </button>
