@@ -18,13 +18,145 @@ jQuery(document).ready(function($) {
             selectedModelName = $(this).data('name');
             selectedPrice = $(this).data('price');
             
-            // Go directly to repair type selection after a brief delay
+            // Load repair categories for selected model
+            loadModelCategories(selectedModelId);
+            
+            // Go to repair type selection after a brief delay
             setTimeout(function() {
                 showStep(2);
             }, 500);
         }
     });
     
+    
+    // Load model categories function
+    function loadModelCategories(modelId) {
+        if (!modelId) return;
+        
+        // Hide all prices first
+        $('.pri-repair-price').hide();
+        
+        $.ajax({
+            url: pri_ajax.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'get_model_categories',
+                model_id: modelId,
+                nonce: pri_ajax.nonce
+            },
+            success: function(response) {
+                console.log('AJAX Response:', response);
+                if (response.success && response.data) {
+                    console.log('Model Data:', response.data.model);
+                    populateRepairTypePricing(response.data);
+                } else {
+                    console.error('Error loading repair options:', response);
+                }
+            },
+            error: function() {
+                console.error('Error loading repair options');
+            }
+        });
+    }
+    
+    // Populate pricing for static repair type options
+    function populateRepairTypePricing(data) {
+        var model = data.model;
+        console.log('populateRepairTypePricing - model:', model);
+        
+        // Define pricing mapping from model data
+        var modelPricing = {
+            screen: model.base_price,
+            battery: model.battery_price,
+            charging: model.charging_price,
+            camera: model.camera_price,
+            water: model.water_price,
+            other: null
+        };
+        
+        console.log('modelPricing:', modelPricing);
+        
+        // Update pricing for each static repair type option
+        var repairTypes = ['screen', 'battery', 'charging', 'camera', 'water', 'other'];
+        
+        $.each(repairTypes, function(index, slug) {
+            var priceElement = $('#price-' + slug);
+            var inputElement = $('#repair-' + slug);
+            var price = modelPricing[slug];
+            
+            console.log('Processing ' + slug + ':', {
+                price: price,
+                priceElement: priceElement.length,
+                inputElement: inputElement.length
+            });
+            
+            // Always show the repair option, but conditionally show pricing
+            inputElement.closest('.pri-repair-type-option').show();
+            
+            if (slug === 'screen') {
+                // Screen damage always shows price (original model price)
+                if (price && price > 0) {
+                    priceElement.text('$' + parseFloat(price).toFixed(2));
+                    priceElement.show();
+                    inputElement.attr('data-price', price);
+                } else {
+                    priceElement.hide();
+                    inputElement.attr('data-price', '0');
+                }
+            } else if (slug === 'other') {
+                // "Other" option never has pricing
+                priceElement.hide();
+                inputElement.attr('data-price', '0');
+            } else if (price && price > 0) {
+                // Show pricing for other categories if configured
+                priceElement.text('$' + parseFloat(price).toFixed(2));
+                priceElement.show();
+                inputElement.attr('data-price', price);
+            } else {
+                // Hide pricing for categories without configured prices
+                priceElement.hide();
+                inputElement.attr('data-price', '0');
+            }
+        });
+        
+        // Rebind repair type selection events
+        bindRepairTypeEvents();
+    }
+    
+    // Bind repair type selection events
+    function bindRepairTypeEvents() {
+        $('input[name="repair_type"]').off('change').on('change', function() {
+            if ($(this).is(':checked')) {
+                selectedRepairType = $(this).val();
+                selectedRepairTypeLabel = $(this).data('label');
+                selectedPrice = $(this).data('price'); // Update selected price based on category
+                
+                // Show/hide other description and continue button based on selection
+                if (selectedRepairType === 'other') {
+                    $('#pri-other-description').slideDown(300);
+                    $('#pri-other-continue-btn').show();
+                    // Focus on the textarea for better UX
+                    setTimeout(function() {
+                        $('#other-description').focus();
+                    }, 350);
+                } else {
+                    $('#pri-other-description').slideUp(200);
+                    $('#pri-other-continue-btn').hide();
+                    $('#other-description').val('');
+                    
+                    // Auto-advance to scheduling after a brief delay
+                    setTimeout(function() {
+                        showStep(3); // Go to scheduling step
+                    }, 600);
+                }
+            }
+        });
+    }
+    
+    // Initial binding for repair type events (for when page loads)
+    $(document).ready(function() {
+        bindRepairTypeEvents();
+    });
     
     // Search functionality
     $('#pri-model-search').on('input', function() {
@@ -62,33 +194,6 @@ jQuery(document).ready(function($) {
         $('#pri-model-search').val('').trigger('input');
     });
     
-    
-    // Repair type selection handling
-    $('input[name="repair_type"]').on('change', function() {
-        if ($(this).is(':checked')) {
-            selectedRepairType = $(this).val();
-            selectedRepairTypeLabel = $(this).data('label');
-            
-            // Show/hide other description and continue button based on selection
-            if (selectedRepairType === 'other') {
-                $('#pri-other-description').slideDown(300);
-                $('#pri-other-continue-btn').show();
-                // Focus on the textarea for better UX
-                setTimeout(function() {
-                    $('#other-description').focus();
-                }, 350);
-            } else {
-                $('#pri-other-description').slideUp(200);
-                $('#pri-other-continue-btn').hide();
-                $('#other-description').val('');
-                
-                // Auto-advance to scheduling after a brief delay
-                setTimeout(function() {
-                    showStep(3); // Go to scheduling step
-                }, 600);
-            }
-        }
-    });
     
     // Repair step navigation
     $('#pri-repair-back-btn').on('click', function() {

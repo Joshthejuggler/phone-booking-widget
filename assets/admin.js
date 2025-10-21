@@ -12,17 +12,32 @@ jQuery(document).ready(function($) {
         $modal.show();
     });
     
-    // Open modal for editing existing model
-    $('.pri-edit-model').on('click', function() {
+    // Open modal for editing existing model (using event delegation)
+    $(document).on('click', '.pri-edit-model', function() {
         var id = $(this).data('id');
         var name = $(this).data('name');
         var price = $(this).data('price');
+        var batteryPrice = $(this).data('battery-price');
+        var chargingPrice = $(this).data('charging-price');
+        var cameraPrice = $(this).data('camera-price');
+        var waterPrice = $(this).data('water-price');
         var active = $(this).data('active');
+        
+        // Debug: show what data we're reading from the button
+        console.log('=== EDIT MODAL OPENING DEBUG ===');
+        console.log('Button data-active value:', active);
+        console.log('Button data-active type:', typeof active);
+        console.log('All button data:', $(this).data());
+        console.log('=================================');
         
         resetForm();
         $('#model-id').val(id);
         $('#model-name').val(name);
-        $('#model-price').val(price);
+        $('#model-screen-price').val(price);
+        $('#model-battery-price').val(batteryPrice || '');
+        $('#model-charging-price').val(chargingPrice || '');
+        $('#model-camera-price').val(cameraPrice || '');
+        $('#model-water-price').val(waterPrice || '');
         $('#model-active').prop('checked', active == 1);
         
         $('#pri-modal-title').text('Edit iPhone Model');
@@ -50,9 +65,17 @@ jQuery(document).ready(function($) {
             nonce: pri_admin_ajax.nonce,
             id: $('#model-id').val(),
             model_name: $('#model-name').val().trim(),
-            price: $('#model-price').val(),
-            is_active: $('#model-active').is(':checked') ? 1 : 0
+            price: $('#model-screen-price').val(),
+            battery_price: $('#model-battery-price').val() || null,
+            charging_price: $('#model-charging-price').val() || null,
+            camera_price: $('#model-camera-price').val() || null,
+            water_price: $('#model-water-price').val() || null
         };
+        
+        // Only send is_active if checkbox is checked (matches standard HTML form behavior)
+        if ($('#model-active').is(':checked')) {
+            formData.is_active = 1;
+        }
         
         // Validate form
         if (!formData.model_name || !formData.price) {
@@ -64,6 +87,9 @@ jQuery(document).ready(function($) {
             showAdminNotice('Please enter a valid price.', 'error');
             return;
         }
+        
+        // Debug: log form data
+        console.log('Submitting form data:', formData);
         
         // Show loading
         showLoading(true);
@@ -95,8 +121,8 @@ jQuery(document).ready(function($) {
         });
     });
     
-    // Handle model deletion
-    $('.pri-delete-model').on('click', function() {
+    // Handle model deletion (using event delegation)
+    $(document).on('click', '.pri-delete-model', function() {
         var id = $(this).data('id');
         var name = $(this).data('name');
         var $row = $(this).closest('tr');
@@ -207,7 +233,7 @@ jQuery(document).ready(function($) {
         }
     });
     
-    $('#model-price').on('blur', function() {
+    $('#model-screen-price').on('blur', function() {
         var price = $(this).val();
         if (!price || isNaN(price) || parseFloat(price) < 0) {
             $(this).css('border-color', '#dc3545');
@@ -217,7 +243,7 @@ jQuery(document).ready(function($) {
     });
     
     // Price input formatting
-    $('#model-price').on('input', function() {
+    $('#model-screen-price, #model-battery-price, #model-charging-price, #model-camera-price, #model-water-price').on('input', function() {
         var value = $(this).val();
         // Remove any non-numeric characters except decimal point
         value = value.replace(/[^0-9.]/g, '');

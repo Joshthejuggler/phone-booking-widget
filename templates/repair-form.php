@@ -44,7 +44,7 @@ $models = $wpdb->get_results("
     <div id="pri-step1" class="pri-form-step pri-active">
         <div class="pri-form-header">
             <h2><?php _e('Select Your iPhone Model', 'phone-repair-intake'); ?></h2>
-            <p><?php _e('Choose your iPhone model to see the repair price and continue with booking.', 'phone-repair-intake'); ?></p>
+            <p><?php _e('Choose your iPhone model to continue with booking.', 'phone-repair-intake'); ?></p>
         </div>
         
         <form id="pri-model-selection-form" class="pri-form">
@@ -69,7 +69,6 @@ $models = $wpdb->get_results("
                                    data-name="<?php echo esc_attr($model->model_name); ?>">
                             <label for="model-<?php echo $model->id; ?>" class="pri-model-label">
                                 <div class="pri-model-name"><?php echo esc_html($model->model_name); ?></div>
-                                <div class="pri-model-price">$<?php echo number_format($model->price, 2); ?></div>
                             </label>
                         </div>
                     <?php endforeach; ?>
@@ -98,6 +97,7 @@ $models = $wpdb->get_results("
                         <div class="pri-repair-icon">📱</div>
                         <div class="pri-repair-name"><?php _e('Screen Damage', 'phone-repair-intake'); ?></div>
                         <div class="pri-repair-desc"><?php _e('Cracked, broken, or unresponsive screen', 'phone-repair-intake'); ?></div>
+                        <div class="pri-repair-price" id="price-screen" style="display: none;"></div>
                     </label>
                 </div>
                 
@@ -107,6 +107,7 @@ $models = $wpdb->get_results("
                         <div class="pri-repair-icon">🔋</div>
                         <div class="pri-repair-name"><?php _e('Battery Issue', 'phone-repair-intake'); ?></div>
                         <div class="pri-repair-desc"><?php _e('Battery drains fast or won\'t charge', 'phone-repair-intake'); ?></div>
+                        <div class="pri-repair-price" id="price-battery" style="display: none;"></div>
                     </label>
                 </div>
                 
@@ -116,6 +117,7 @@ $models = $wpdb->get_results("
                         <div class="pri-repair-icon">⚡</div>
                         <div class="pri-repair-name"><?php _e('Charging Issue', 'phone-repair-intake'); ?></div>
                         <div class="pri-repair-desc"><?php _e('Won\'t charge or charging port problems', 'phone-repair-intake'); ?></div>
+                        <div class="pri-repair-price" id="price-charging" style="display: none;"></div>
                     </label>
                 </div>
                 
@@ -125,6 +127,7 @@ $models = $wpdb->get_results("
                         <div class="pri-repair-icon">📸</div>
                         <div class="pri-repair-name"><?php _e('Camera Issue', 'phone-repair-intake'); ?></div>
                         <div class="pri-repair-desc"><?php _e('Front or rear camera not working', 'phone-repair-intake'); ?></div>
+                        <div class="pri-repair-price" id="price-camera" style="display: none;"></div>
                     </label>
                 </div>
                 
@@ -134,6 +137,7 @@ $models = $wpdb->get_results("
                         <div class="pri-repair-icon">💧</div>
                         <div class="pri-repair-name"><?php _e('Water Damage', 'phone-repair-intake'); ?></div>
                         <div class="pri-repair-desc"><?php _e('Phone got wet or liquid damage', 'phone-repair-intake'); ?></div>
+                        <div class="pri-repair-price" id="price-water" style="display: none;"></div>
                     </label>
                 </div>
                 
@@ -143,6 +147,7 @@ $models = $wpdb->get_results("
                         <div class="pri-repair-icon">❓</div>
                         <div class="pri-repair-name"><?php _e('Other Issue', 'phone-repair-intake'); ?></div>
                         <div class="pri-repair-desc"><?php _e('Describe your specific problem', 'phone-repair-intake'); ?></div>
+                        <div class="pri-repair-price" id="price-other" style="display: none;"></div>
                     </label>
                 </div>
             </div>
