@@ -29,6 +29,12 @@ class PhoneRepairIntake {
         // Load text domain for translations
         load_plugin_textdomain('phone-repair-intake', false, dirname(plugin_basename(__FILE__)) . '/languages');
         
+        // Load analytics migration system
+        require_once PRI_PLUGIN_PATH . 'includes/class-analytics-migration.php';
+        
+        // Load analytics system
+        require_once PRI_PLUGIN_PATH . 'includes/class-analytics-api.php';
+        
         // Check and upgrade database if needed
         $this->maybe_upgrade_database();
         
@@ -490,6 +496,24 @@ class PhoneRepairIntake {
         
         add_submenu_page(
             'phone-repair-intake',
+            __('Add Manual Repair', 'phone-repair-intake'),
+            __('+ Add Manual Repair', 'phone-repair-intake'),
+            'manage_options',
+            'phone-repair-add-manual',
+            array($this, 'add_manual_repair_admin_page')
+        );
+        
+        add_submenu_page(
+            'phone-repair-intake',
+            __('Statistics', 'phone-repair-intake'),
+            __('📊 Statistics', 'phone-repair-intake'),
+            'manage_options',
+            'phone-repair-statistics',
+            array($this, 'statistics_admin_page')
+        );
+        
+        add_submenu_page(
+            'phone-repair-intake',
             __('Availability', 'phone-repair-intake'),
             __('Availability', 'phone-repair-intake'),
             'manage_options',
@@ -542,6 +566,24 @@ class PhoneRepairIntake {
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('pri_admin_nonce')
             ));
+            
+            // Analytics dashboard specific scripts
+            if (strpos($hook, 'phone-repair-statistics') !== false) {
+                wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', array(), '4.4.0', true);
+                wp_enqueue_script('pri-analytics-js', PRI_PLUGIN_URL . 'assets/analytics.js', array('jquery', 'chart-js'), PRI_VERSION, true);
+                wp_enqueue_style('pri-analytics-css', PRI_PLUGIN_URL . 'assets/analytics.css', array(), PRI_VERSION);
+                
+                wp_localize_script('pri-analytics-js', 'priAnalytics', array(
+                    'apiUrl' => rest_url('pri/v1/stats/'),
+                    'nonce' => wp_create_nonce('wp_rest'),
+                    'dateFormat' => get_option('date_format'),
+                    'defaultFilters' => array(
+                        'date_from' => date('Y-m-d', strtotime('-30 days')),
+                        'date_to' => date('Y-m-d'),
+                        'interval' => 'day'
+                    )
+                ));
+            }
         }
     }
     
@@ -584,6 +626,14 @@ class PhoneRepairIntake {
     
     public function calendar_test_admin_page() {
         include PRI_PLUGIN_PATH . 'templates/admin-calendar-test.php';
+    }
+    
+    public function add_manual_repair_admin_page() {
+        include PRI_PLUGIN_PATH . 'templates/admin-add-manual-repair.php';
+    }
+    
+    public function statistics_admin_page() {
+        include PRI_PLUGIN_PATH . 'templates/admin-statistics.php';
     }
     
     public function database_tools_admin_page() {
@@ -1353,6 +1403,117 @@ class PhoneRepairIntake {
         );
         
         wp_send_json_success($message);
+    }
+    
+    /**
+     * Save manually entered repair
+     */
+    public function save_manual_repair($data) {
+        global $wpdb;
+        
+        try {
+            // Sanitize and validate input
+            $customer_name = sanitize_text_field($data['customer_name']);
+            $customer_email = sanitize_email($data['customer_email']);
+            $customer_phone = sanitize_text_field($data['customer_phone']);
+            $iphone_model_id = intval($data['iphone_model_id']);
+            $repair_category_id = intval($data['repair_category_id']);
+            $repair_description = sanitize_textarea_field($data['repair_description']);
+            $price_charged = floatval($data['price_charged']);
+            $status = sanitize_text_field($data['status']);
+            $source = sanitize_text_field($data['source']);
+            $customer_notes = sanitize_textarea_field($data['customer_notes']);
+            
+            // Validate required fields
+            if (empty($customer_name) || empty($iphone_model_id) || empty($repair_category_id) || 
+                empty($price_charged) || empty($status) || empty($source)) {
+                return array('success' => false, 'message' => 'All required fields must be filled.');
+            }
+            
+            // Validate status
+            $valid_statuses = array('pending', 'confirmed', 'in_progress', 'completed', 'cancelled');
+            if (!in_array($status, $valid_statuses)) {
+                return array('success' => false, 'message' => 'Invalid status selected.');
+            }
+            
+            // Handle completion date
+            $completed_at = null;
+            if ($status === 'completed') {
+                $completed_date = sanitize_text_field($data['completed_date']);
+                $completed_time = sanitize_text_field($data['completed_time']);
+                
+                if (!empty($completed_date)) {
+                    $time_part = !empty($completed_time) ? $completed_time : '12:00';
+                    $completed_at = $completed_date . ' ' . $time_part . ':00';
+                } else {
+                    $completed_at = current_time('mysql');
+                }
+            }
+            
+            // Get repair type from category for backwards compatibility
+            $categories_table = $wpdb->prefix . 'pri_repair_categories';
+            $category = $wpdb->get_row($wpdb->prepare(
+                "SELECT slug FROM $categories_table WHERE id = %d",
+                $repair_category_id
+            ));
+            $repair_type = $category ? $category->slug : 'other';
+            
+            // Insert appointment record
+            $appointments_table = $wpdb->prefix . 'pri_appointments';
+            $result = $wpdb->insert(
+                $appointments_table,
+                array(
+                    'iphone_model_id' => $iphone_model_id,
+                    'repair_category_id' => $repair_category_id,
+                    'repair_type' => $repair_type,
+                    'repair_description' => $repair_description,
+                    'customer_name' => $customer_name,
+                    'customer_email' => $customer_email,
+                    'customer_phone' => $customer_phone,
+                    'customer_notes' => $customer_notes,
+                    'status' => $status,
+                    'price_snapshot' => $price_charged,
+                    'currency' => 'USD',
+                    'source' => $source,
+                    'completed_at' => $completed_at,
+                    'created_at' => current_time('mysql')
+                ),
+                array('%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%s', '%s', '%s', '%s')
+            );
+            
+            if ($result === false) {
+                error_log('Manual repair save error: ' . $wpdb->last_error);
+                return array('success' => false, 'message' => 'Database error: ' . $wpdb->last_error);
+            }
+            
+            $appointment_id = $wpdb->insert_id;
+            
+            // Create status history entry
+            $history_table = $wpdb->prefix . 'pri_appointment_status_history';
+            if ($wpdb->get_var("SHOW TABLES LIKE '$history_table'") === $history_table) {
+                $wpdb->insert(
+                    $history_table,
+                    array(
+                        'appointment_id' => $appointment_id,
+                        'old_status' => null,
+                        'new_status' => $status,
+                        'changed_at' => current_time('mysql'),
+                        'changed_by' => get_current_user_id(),
+                        'notes' => 'Manual repair entry'
+                    ),
+                    array('%d', '%s', '%s', '%s', '%d', '%s')
+                );
+            }
+            
+            return array(
+                'success' => true, 
+                'message' => 'Manual repair added successfully! Appointment ID: ' . $appointment_id
+            );
+            
+        } catch (Exception $e) {
+            error_log('Manual repair save exception: ' . $e->getMessage());
+            return array('success' => false, 'message' => 'An error occurred: ' . $e->getMessage());
+        }
     }
 }
 

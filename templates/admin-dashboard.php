@@ -21,6 +21,14 @@ global $wpdb;
 $appointments_table = $wpdb->prefix . 'pri_appointments';
 $models_table = $wpdb->prefix . 'pri_iphone_models';
 
+// Check if analytics migration is needed
+$migration_needed = false;
+$columns = $wpdb->get_results("DESCRIBE $appointments_table");
+$column_names = array_column($columns, 'Field');
+if (!in_array('source', $column_names) || !in_array('repair_category_id', $column_names)) {
+    $migration_needed = true;
+}
+
 // Get statistics
 $total_appointments = $wpdb->get_var("SELECT COUNT(*) FROM $appointments_table");
 $pending_appointments = $wpdb->get_var("SELECT COUNT(*) FROM $appointments_table WHERE status = 'pending'");
@@ -36,6 +44,14 @@ $recent_appointments = $wpdb->get_results("
 
 <div class="wrap">
     <h1><?php _e('Phone Repair Dashboard', 'phone-repair-intake'); ?></h1>
+    
+    <?php if ($migration_needed): ?>
+        <div class="notice notice-warning">
+            <p><strong><?php _e('Analytics Enhancement Available!', 'phone-repair-intake'); ?></strong></p>
+            <p><?php _e('Your database can be enhanced with new analytics features including source tracking and manual repair entry. The migration will run automatically when you visit any admin page.', 'phone-repair-intake'); ?></p>
+            <p><a href="<?php echo admin_url('admin.php?page=phone-repair-add-manual'); ?>" class="button button-primary"><?php _e('Trigger Migration & Add Manual Repair', 'phone-repair-intake'); ?></a></p>
+        </div>
+    <?php endif; ?>
     
     <div class="pri-dashboard-stats">
         <div class="postbox">
@@ -113,6 +129,7 @@ $recent_appointments = $wpdb->get_results("
             <div class="inside">
                 <p><a href="<?php echo admin_url('admin.php?page=phone-repair-models'); ?>" class="button button-primary"><?php _e('Manage iPhone Models', 'phone-repair-intake'); ?></a></p>
                 <p><a href="<?php echo admin_url('admin.php?page=phone-repair-appointments'); ?>" class="button"><?php _e('View All Appointments', 'phone-repair-intake'); ?></a></p>
+                <p><a href="<?php echo admin_url('admin.php?page=phone-repair-add-manual'); ?>" class="button button-secondary" style="background: #00a32a; border-color: #00a32a; color: white;"><?php _e('+ Add Manual Repair', 'phone-repair-intake'); ?></a></p>
                 
                 <form method="post" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
                     <?php wp_nonce_field('pri_update_prices'); ?>

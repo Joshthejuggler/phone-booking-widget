@@ -1,0 +1,516 @@
+/**
+ * Phone Repair Analytics Dashboard Styles
+ * Professional WordPress admin styling
+ */
+
+/* Dashboard Layout */
+.pri-analytics-dashboard {
+    margin: 20px 0;
+}
+
+.pri-analytics-dashboard h1 {
+    margin-bottom: 20px;
+    font-size: 23px;
+}
+
+/* Loading Indicator */
+.pri-loading {
+    text-align: center;
+    padding: 40px;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+}
+
+.pri-loading .spinner {
+    float: none;
+    margin: 0 auto 10px;
+}
+
+/* Filters Section */
+.pri-filters-section {
+    margin-bottom: 20px;
+}
+
+.pri-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 15px 0;
+}
+
+.pri-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.pri-filter-group label {
+    font-weight: 600;
+    color: #1d2327;
+    font-size: 13px;
+}
+
+.pri-date-presets {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.date-preset {
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 3px;
+    border: 1px solid #c3c4c7;
+    background: #f6f7f7;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.date-preset:hover,
+.date-preset.active {
+    background: #2271b1;
+    color: #fff;
+    border-color: #135e96;
+}
+
+.pri-date-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.pri-multiselect {
+    height: 80px;
+    border: 1px solid #8c8f94;
+    border-radius: 3px;
+    padding: 4px;
+}
+
+/* KPI Section */
+.pri-kpi-section {
+    margin-bottom: 30px;
+}
+
+.pri-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.pri-kpi-card {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: box-shadow 0.3s ease;
+}
+
+.pri-kpi-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.pri-kpi-icon {
+    font-size: 32px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f6f7f7;
+    border-radius: 50%;
+}
+
+.pri-kpi-content {
+    flex: 1;
+}
+
+.pri-kpi-value {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1;
+    color: #1d2327;
+    margin-bottom: 4px;
+}
+
+.pri-kpi-label {
+    font-size: 13px;
+    color: #646970;
+    font-weight: 500;
+}
+
+/* Charts Section */
+.pri-charts-section {
+    margin-bottom: 30px;
+}
+
+.pri-charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.pri-chart-container {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+}
+
+.pri-chart-container.full-width {
+    grid-column: 1 / -1;
+}
+
+.pri-chart-container .postbox {
+    border: none;
+    box-shadow: none;
+    margin: 0;
+}
+
+.pri-chart-container .inside {
+    padding: 20px;
+    min-height: 300px;
+    position: relative;
+}
+
+.pri-chart-container.full-width .inside {
+    min-height: 400px;
+}
+
+/* Chart Canvas Responsive */
+canvas {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Top Performers Section */
+.pri-performers-section {
+    margin-bottom: 30px;
+}
+
+.pri-performers-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.pri-performers-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.pri-performer-card {
+    padding: 15px;
+    background: #f6f7f7;
+    border-radius: 4px;
+    border: 1px solid #dcdcde;
+}
+
+.pri-performer-card h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #1d2327;
+    font-weight: 600;
+}
+
+.pri-performer-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pri-performer-item .icon {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 50%;
+    border: 1px solid #c3c4c7;
+}
+
+.pri-performer-item .details {
+    flex: 1;
+}
+
+.pri-performer-item .name {
+    font-weight: 600;
+    color: #1d2327;
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+.pri-performer-item .count {
+    color: #646970;
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+/* Data Tables Section */
+.pri-tables-section {
+    margin-bottom: 30px;
+}
+
+.pri-table-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #c3c4c7;
+}
+
+.pri-tab-button {
+    padding: 10px 20px;
+    background: #f6f7f7;
+    border: 1px solid #c3c4c7;
+    border-bottom: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #646970;
+    border-radius: 4px 4px 0 0;
+    transition: all 0.2s ease;
+}
+
+.pri-tab-button:hover {
+    background: #fff;
+    color: #1d2327;
+}
+
+.pri-tab-button.active {
+    background: #fff;
+    color: #1d2327;
+    border-bottom-color: #fff;
+    position: relative;
+    z-index: 1;
+}
+
+.pri-table-content {
+    display: none;
+}
+
+.pri-table-content.active {
+    display: block;
+}
+
+/* Modal */
+.pri-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.pri-modal-content {
+    background: #fff;
+    padding: 0;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 90%;
+}
+
+.pri-modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #c3c4c7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pri-modal-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #1d2327;
+}
+
+.pri-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #646970;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.pri-modal-close:hover {
+    background: #f6f7f7;
+    color: #1d2327;
+}
+
+.pri-modal-body {
+    padding: 20px;
+    text-align: center;
+}
+
+.pri-modal-body .spinner {
+    float: none;
+    margin: 10px auto;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .pri-charts-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .pri-kpi-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+}
+
+@media (max-width: 782px) {
+    .pri-filter-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .pri-kpi-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 15px;
+    }
+    
+    .pri-kpi-card {
+        padding: 15px;
+    }
+    
+    .pri-kpi-value {
+        font-size: 24px;
+    }
+    
+    .pri-performers-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .pri-date-presets {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .pri-date-inputs {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 600px) {
+    .pri-analytics-dashboard {
+        margin: 10px;
+    }
+    
+    .pri-kpi-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .pri-chart-container .inside {
+        padding: 15px;
+        min-height: 250px;
+    }
+    
+    .pri-modal-content {
+        margin: 20px;
+        width: auto;
+    }
+}
+
+/* WordPress Admin Compatibility */
+.wrap .pri-analytics-dashboard {
+    margin: 0;
+}
+
+/* Postbox Toolbar */
+.postbox-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.postbox-toolbar .button {
+    font-size: 12px;
+    padding: 3px 8px;
+    height: auto;
+}
+
+/* Success/Error Colors */
+.notice-success {
+    border-left-color: #00a32a;
+    background: #f0f6fc;
+}
+
+.notice-error {
+    border-left-color: #d63638;
+    background: #fcf0f1;
+}
+
+/* Custom Button Styles */
+.button.date-preset {
+    height: auto;
+    line-height: 1.4;
+    text-decoration: none;
+}
+
+.button.date-preset:focus {
+    box-shadow: 0 0 0 1px #2271b1;
+}
+
+/* Chart Loading States */
+.pri-chart-container .inside:empty::after {
+    content: "Loading chart...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #646970;
+    font-style: italic;
+}
+
+/* Accessibility Improvements */
+.pri-kpi-card:focus-within {
+    outline: 2px solid #2271b1;
+    outline-offset: 2px;
+}
+
+.pri-tab-button:focus {
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+
+/* Print Styles */
+@media print {
+    .pri-filters-section,
+    .postbox-toolbar,
+    .pri-modal {
+        display: none;
+    }
+    
+    .pri-charts-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .pri-chart-container {
+        break-inside: avoid;
+        margin-bottom: 40px;
+    }
+}

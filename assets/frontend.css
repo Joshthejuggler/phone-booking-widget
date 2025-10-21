@@ -128,11 +128,11 @@
 .pri-model-price {
     font-size: 18px;
     font-weight: 700;
-    color: #28a745;
+    color: #ff1493;
 }
 
 .pri-model-option input[type="radio"]:checked + .pri-model-label .pri-model-price {
-    color: #fff;
+    color: #ff1493;
 }
 
 /* Selected Model Info */
@@ -156,12 +156,12 @@
 .pri-repair-price {
     font-size: 18px;
     font-weight: 700;
-    color: #28a745;
+    color: #ff1493;
     margin-top: 10px;
 }
 
 .pri-repair-type-option input[type="radio"]:checked + .pri-repair-type-label .pri-repair-price {
-    color: #fff;
+    color: #ff1493;
 }
 
 /* Loading Categories */
@@ -352,7 +352,7 @@
 .pri-selected-price-display {
     font-size: 24px;
     font-weight: 700;
-    color: #28a745;
+    color: #ff1493;
     line-height: 1;
 }
 
